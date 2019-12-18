@@ -113,7 +113,7 @@ def do_pull_request(github_token, github_event):
   """Process pull request events."""
   maybe_print("[command]Detected Pull Request Event.", 1)
   pr_dir = "/tmp/pr"
-  clone_url = github_event['pull_request']['head']['clone_url']
+  clone_url = github_event['pull_request']['base']['repo']['clone_url']
   maybe_print("[command]Cloning branch.", 1)
   # merge_sha is the one that would be potentially merged.
   merge_sha = os.getenv('GITHUB_SHA')
