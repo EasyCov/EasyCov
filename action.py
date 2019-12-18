@@ -127,6 +127,7 @@ def do_pull_request(github_token, github_event):
 
   # Get the coverage from the base sha.
   git_fetch(base_sha, pr_dir)
+  execute(git_cmd + 'checkout %s' % (base_sha))
   execute("cp -f %s /tmp/coverage.bin.gz" % (os.path.join(pr_dir, 'coverage.bin.gz')))
   execute("gunzip /tmp/coverage.bin.gz")
   coverage_bin = "/tmp/coverage.bin"
