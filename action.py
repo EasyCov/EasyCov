@@ -38,7 +38,10 @@ def execute(cmd, check=True):
 
 def git_clone(repo_url, github_token, target_dir):
   """Clone a repo into the target_dir."""
-  clone_url = repo_url.replace('https://', 'https://x-access-token:' + github_token + "@")
+  if github_token:
+    clone_url = repo_url.replace('https://', 'https://x-access-token:' + github_token + "@")
+  else:
+    clone_url = repo_url
   execute("git init %s" % (target_dir))
   execute("git -C %s remote add origin %s" % (target_dir, clone_url))
 
@@ -123,7 +126,7 @@ def do_pull_request(github_token, github_event):
   base_sha = github_event['pull_request']['base']['sha']
 
   git_cmd = "git -C %s " % (pr_dir)
-  git_clone(clone_url, github_token, pr_dir)
+  git_clone(clone_url, None, pr_dir)
 
   # Get the coverage from the base sha.
   git_fetch(base_sha, pr_dir)
