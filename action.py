@@ -42,9 +42,9 @@ def git_clone(repo_url, github_token, target_dir):
   execute("git init %s" % (target_dir))
   execute("git -C %s remote add origin %s" % (target_dir, clone_url))
 
-def git_fetch(sha, target_dir):
+def git_fetch(sha, target_dir, depth=1):
   """Checkout a single commit into the target_dir."""
-  execute("git -C %s fetch --depth 1 origin %s" % (target_dir, sha))
+  execute("git -C %s fetch --depth %d origin %s" % (target_dir, depth, sha))
   execute("git -C %s log -1 %s" % (target_dir, sha))
 
 def translate_docker_path(path):
@@ -125,8 +125,9 @@ def do_pull_request(github_token, github_event):
   git_cmd = "git -C %s " % (pr_dir)
   git_clone(clone_url, github_token, pr_dir)
 
-  # Get the coverage from the base sha.
-  git_fetch(base_sha, pr_dir)
+  # We can't fetch the base_sha because it isn't advertised so fetch the
+  # merge_sha and trust that at depth 2, the base_sha will be there.
+  git_fetch(merge_sha, 2, pr_dir)
   execute(git_cmd + 'checkout %s' % (base_sha))
   execute("cp -f %s /tmp/coverage.bin.gz" % (os.path.join(pr_dir, 'coverage.bin.gz')))
   execute("gunzip /tmp/coverage.bin.gz")
