@@ -127,7 +127,7 @@ def do_pull_request(github_token, github_event):
 
   # We can't fetch the base_sha because it isn't advertised so fetch the
   # merge_sha and trust that at depth 2, the base_sha will be there.
-  git_fetch(merge_sha, 2, pr_dir)
+  git_fetch(merge_sha, pr_dir, depth=2)
   execute(git_cmd + 'checkout %s' % (base_sha))
   execute("cp -f %s /tmp/coverage.bin.gz" % (os.path.join(pr_dir, 'coverage.bin.gz')))
   execute("gunzip /tmp/coverage.bin.gz")
