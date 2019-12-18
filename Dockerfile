@@ -1,7 +1,7 @@
 # Container image that runs your code
 FROM alpine
 
-RUN apk --update add git wget python python-pip python-pip-whl
+RUN apk --update add git wget python py-pip
 RUN pip install coverage
 RUN pip install wheel
 RUN pip install colorama
